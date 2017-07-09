@@ -1,57 +1,61 @@
-#include <iostream>
+/*
+Фролов Максим Павлович БПИ162
+Задание №1
+Разработано в онлайн-компиляторе CLion 2017.1.3
+*/
 
+#include <iostream>
 using namespace std;
 
-/**
- * Reverse the order of the elements at indices [begin; end] in the array
- * @param arr The array whose elements are to be reversed
- * @param begin Start index (inclusive) of the interval to be reversed
- * @param end Start index (inclusive) of the interval to be reversed
- */
-void reserse_array(int* arr, int begin, int end)
-{
-    for(int i = 0; i < (end - begin + 1) / 2; i++) {
-        int temp = arr[begin + i];
-        arr[begin + i] = arr[end - i];
-        arr[end - i] = temp;
+void print(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void swap(int* arr, int ind1, int ind2) {
+    int temp = arr[ind1];
+    arr[ind1] = arr[ind2];
+    arr[ind2] = temp;
+}
+
+void reverse(int* arr, int ind1, int ind2) {
+    for (int i = 0; i < (ind2 - ind1 + 1) / 2; i++) {
+        swap(arr, ind1 + i, ind2 - i);
     }
 }
 
-int main(int argc, char* argv[])
-{
-    int N, k;
+void shift(int* arr, int n, int k) {
+    k %= n;
+    reverse(arr, 0, k - 1);
+    reverse(arr, k, n - 1);
+    reverse(arr, 0, n - 1);
+}
 
-    cout << "Enter N: ";
-    cin >> N;
+int main() {
+    unsigned int n;
+    cout << "Enter array size (n): ";
+    cin >> n;
 
-    cout << "Enter k: ";
+    unsigned int k;
+    cout << "Enter shift (k): ";
     cin >> k;
 
-    int* arr = new int[N];
+    int arr[n];
 
-    cout << "Array is:" << endl;
-
-    for(int i = 0; i < N; i++) {
-        arr[i] = i + 1;
-        cout << arr[i] << "; ";
+    cout << "Enter array elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
 
-    k %= N;
+    cout << "Array before shift: " << endl;
+    print(arr, n);
 
-    /*
-     * Shift array to the left by k positions in O(n) time
-     */
-    reserse_array(arr, 0, k - 1);
-    reserse_array(arr, k, N - 1);
-    reserse_array(arr, 0, N - 1);
+    shift(arr, n, k);
 
-    cout << endl << "Array after shifting is:" << endl;
-
-    for(int i = 0; i < N; i++) {
-        cout << arr[i] << "; ";
-    }
-
-    delete[] arr;
+    cout << "Array after shift: " << endl;
+    print(arr, n);
 
     return 0;
 }
