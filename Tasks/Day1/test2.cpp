@@ -14,12 +14,6 @@ void print(int arr[], int n) {
     cout << endl;
 }
 
-void swap(int* arr, int ind1, int ind2) {
-    int temp = arr[ind1];
-    arr[ind1] = arr[ind2];
-    arr[ind2] = temp;
-}
-
 void move(int* arr, int n) {
     int count = 0;
 
