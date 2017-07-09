@@ -44,4 +44,6 @@ int main() {
 
     cout << "Array after move: " << endl;
     print(arr, n);
+    
+    return 0;
 }
