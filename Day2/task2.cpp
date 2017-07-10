@@ -1,5 +1,5 @@
 // Фролов Максим Павлович БПИ162
-// Задание №1 день 2
+// Задание №2 день 2
 // Разработано в CLion 2017.1.3
 
 #include <iostream>
@@ -8,9 +8,9 @@ using namespace std;
 
 void print(int*, int);
 void swap(int*, int, int);
-void bubble_sort(int*, int);
-void bubble_sort1(int*, int);
-void bubble_sort2(int*, int);
+void insertion_sort(int*, int);
+void insertion_sort1(int*, int);
+int binary_search(int*, int, int, int);
 int* array_copy(int*, int);
 
 int main() {
@@ -20,18 +20,31 @@ int main() {
     cout << "Enter array size: ";
     cin >> n;
 
-    int l, h;
-    cout << "Enter range for array elements (lower and higher bound): ";
-    cin >> l >> h;
+    // Определяем, как задавать элементы массива: с клавиатуры или с помощью
+    // генератора случайных чисел. Некорректный ввод не учитываем.
+    char c;
+    cout << "Enter\n[i array_elements] to manually set array elements "
+         << "or\n[r lower_bound higher_bound] for random generation: " << endl;
+    cin >> c;
 
     int arr[n];
-    for (int i = 0; i < n; i++) {
-        arr[i] = rand() % (l - h) + l;
+    if (c == 'r') {
+        int l, h;
+        cin >> l >> h;
+        for (int i = 0; i < n; i++)
+            arr[i] = rand() % (h - l) + l;
+    }
+    else if (c == 'i'){
+        for (int i = 0; i < n; i++)
+            cin >> arr[i];
+    }
+    else {
+        cout << "Invalid input.";
+        return 0;
     }
 
-    bubble_sort(array_copy(arr, n), n);
-    bubble_sort1(array_copy(arr, n), n);
-    bubble_sort2(array_copy(arr, n), n);
+    insertion_sort(array_copy(arr, n), n);
+    insertion_sort1(array_copy(arr, n), n);
 
     return 0;
 }
@@ -47,16 +60,6 @@ void print(int* arr, int n) {
 }
 
 /// <summary>
-/// Получение ссылки на массив, идентичный arr.
-/// </summary>
-int* array_copy(int* arr, int n) {
-    int* res = new int[n];
-    for (int i = 0; i < n; i++)
-        res[i] = arr[i];
-    return res;
-}
-
-/// <summary>
 /// Обмен местами двух элементов массива.
 /// </summary>
 void swap(int* arr, int ind1, int ind2) {
@@ -66,88 +69,89 @@ void swap(int* arr, int ind1, int ind2) {
 }
 
 /// <summary>
-/// Сортировка пузырьком.
+/// Сортировка вставками.
 /// </summary>
-void bubble_sort(int* arr, int n) {
+void insertion_sort(int* arr, int n) {
     cout << "------------------------" << endl;
-    cout << "Array before bubble sort: " << endl;
+    cout << "Array before insertion sort: " << endl;
     print(arr, n);
 
     int scount = 0; // Количество свапов.
     int icount = 0; // Колличество итераций алгоритма.
 
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - 1; j++) {
+    for (int i = 1; i < n; i++) {
+        int temp = arr[i];
+        int j;
+        for (j = i - 1; j >= 0 && arr[j] > temp; j--) {
+            arr[j + 1] = arr[j];
             icount++;
-            if (arr[j] > arr[j + 1]) {
-                scount++;
-                swap(arr, j, j + 1);
-            }
+            scount++;
         }
+        arr[j + 1] = temp;
+        scount++;
     }
-    cout << "Array after bubble sort: " << endl;
+
+    cout << "Array after insertion sort: " << endl;
     print(arr, n);
     cout << "Iterations done: " << icount << endl;
     cout << "Swaps done: " << scount << endl;
 }
 
 /// <summary>
-/// Сортировка пузырьком с условием Айверсона 1.
+/// Сортировка бинарными вставками.
 /// </summary>
-void bubble_sort1(int* arr, int n) {
+void insertion_sort1(int* arr, int n) {
     cout << "------------------------" << endl;
-    cout << "Array before bubble sort (modified 1): " << endl;
+    cout << "Array before insertion sort (modified 1): " << endl;
     print(arr, n);
 
     int scount = 0; // Количество свапов.
     int icount = 0; // Колличество итераций алгоритма.
 
-    bool unsorted = true;
-    while(unsorted) {
-        unsorted = false;
-        for (int j = 0; j < n - 1; j++) {
-            icount++;
-            if (arr[j] > arr[j + 1]) {
-                swap(arr, j, j + 1);
-                unsorted = true;
+    for (int i = 1; i < n; i++) {
+        if (arr[i - 1] > arr[i]) {
+            int temp = arr[i];
+            int ind = binary_search(arr, 0, i - 1, temp);
+            for (int j = i - 1; j >= ind; j--) {
+                arr[j + 1] = arr[j];
+                icount++;
                 scount++;
             }
+            arr[ind] = temp;
+            scount++;
         }
     }
 
-    cout << "Array after bubble sort (modified 1): " << endl;
+    cout << "Array after insertion sort: " << endl;
     print(arr, n);
     cout << "Iterations done: " << icount << endl;
     cout << "Swaps done: " << scount << endl;
 }
 
 /// <summary>
-/// Сортировка пузырьком с условием Айверсона 2.
+/// Бинарный поиск элемента el в первых n элементах массива arr.
 /// </summary>
-void bubble_sort2(int* arr, int n) {
-    cout << "------------------------" << endl;
-    cout << "Array before bubble sort (modified 2): " << endl;
-    print(arr, n);
+int binary_search(int* arr, int l, int r, int el) {
+    if (el >= arr[r])
+        return r;
+    if (arr[l] >= el)
+        return l;
 
-    int scount = 0; // Количество свапов.
-    int icount = 0; // Колличество итераций алгоритма.
-
-    int bound = n - 1;
-    while(bound != 0) {
-        int last_swap = 0;
-        for (int j = 0; j < bound; j++) {
-            icount++;
-            if (arr[j] > arr[j + 1]) {
-                swap(arr, j, j + 1);
-                last_swap = j;
-                scount++;
-            }
-        }
-        bound = last_swap;
-    }
-
-    cout << "Array after bubble sort (modified 2): " << endl;
-    print(arr, n);
-    cout << "Iterations done: " << icount << endl;
-    cout << "Swaps done: " << scount << endl;
+    int mid = l + (r - l)/2; // Центр границы, заданной l и r.
+    if (arr[mid] == el)
+        return mid;
+    if (arr[mid] > el)
+        return binary_search(arr, l, mid - 1, el);
+    return binary_search(arr, mid + 1, r, el);
 }
+
+/// <summary>
+/// Получение ссылки на массив, идентичный arr.
+/// </summary>
+int* array_copy(int* arr, int n) {
+    int* res = new int[n];
+    for (int i = 0; i < n; i++)
+        res[i] = arr[i];
+    return res;
+}
+
