@@ -1,8 +1,6 @@
-/*
-Фролов Максим Павлович БПИ162
-Задание №2
-Разработано в CLion 2017.1.3
-*/
+// Фролов Максим Павлович БПИ162
+// Задание №2 день 1
+// Разработано в CLion 2017.1.3
 
 #include <iostream>
 using namespace std;
@@ -26,7 +24,7 @@ void move(int* arr, int n) {
         arr[count++] = 0;
 }
 
-int main() {
+void main() {
     int n;
     cout << "Enter array size: ";
     cin >> n;
@@ -44,6 +42,4 @@ int main() {
 
     cout << "Array after move: " << endl;
     print(arr, n);
-    
-    return 0;
 }
