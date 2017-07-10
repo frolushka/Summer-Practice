@@ -6,14 +6,54 @@
 #include <ctime>
 using namespace std;
 
+void print(int*, int);
+void array_copy(int*, int);
+void swap(int*, int, int);
+void bubble_sort(int*, int);
+void bubble_sort1(int*, int);
+void bubble_sort2(int*, int);
+
+int main() {
+    srand(time(0));
+
+    int n;
+    cout << "Enter array size: ";
+    cin >> n;
+
+    int l, h;
+    cout << "Enter range for array elements (lower and higher bound): ";
+    cin >> l >> h;
+
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        arr[i] = rand() % (l - h + 1) + l;
+    }
+
+    bubble_sort(array_copy(arr, n), n);
+    bubble_sort1(array_copy(arr, n), n);
+    bubble_sort2(array_copy(arr, n), n);
+
+    return 0;
+}
+
 /// <summary>
 /// Вывод переданного массива на экран.
 /// </summary>
-void print(int arr[], int n) {
+void print(int* arr, int n) {
     for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
     cout << endl;
+}
+
+/// <summary>
+/// Получение ссылки на массив, идентичный arr.
+/// </summary>
+int* array_copy(int* arr, int n) {
+    int* res = new int[n];
+    for (int i = 0; i < n; i++)
+        res[i] = arr[i];
+    return res;
 }
 
 /// <summary>
@@ -23,13 +63,6 @@ void swap(int* arr, int ind1, int ind2) {
     int temp = arr[ind1];
     arr[ind1] = arr[ind2];
     arr[ind2] = temp;
-}
-
-int* array_copy(int* arr, int n) {
-    int* res = new int[n];
-    for (int i = 0; i < n; i++)
-        res[i] = arr[i];
-    return res;
 }
 
 /// <summary>
@@ -117,28 +150,4 @@ void bubble_sort2(int* arr, int n) {
     print(arr, n);
     cout << "Iterations done: " << icount << endl;
     cout << "Swaps done: " << scount << endl;
-}
-
-
-int main() {
-    srand(time(0));
-
-    int n;
-    cout << "Enter array size: ";
-    cin >> n;
-
-    int l, h;
-    cout << "Enter range for array elements (lower and higher bound): ";
-    cin >> l >> h;
-
-    int arr[n];
-    for (int i = 0; i < n; i++) {
-        arr[i] = rand() % (l - h + 1) + l;
-    }
-
-    bubble_sort(array_copy(arr, n), n);
-    bubble_sort1(array_copy(arr, n), n);
-    bubble_sort2(array_copy(arr, n), n);
-
-    return 0;
 }
