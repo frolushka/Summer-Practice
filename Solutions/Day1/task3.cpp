@@ -1,8 +1,6 @@
-/*
-Фролов Максим Павлович БПИ162
-Задание №3
-Разработано в CLion 2017.1.3
-*/
+// Фролов Максим Павлович БПИ162
+// Задание №3 день 1
+// Разработано в CLion 2017.1.3
 
 #include <iostream>
 using namespace std;
@@ -29,7 +27,7 @@ void bubble_sort(int* arr, int n) {
     }
 }
 
-int main() {
+void main() {
     int n;
     cout << "Enter array size: ";
     cin >> n;
@@ -47,6 +45,4 @@ int main() {
 
     cout << "Array after bubble sort: " << endl;
     print(arr, n);
-    
-    return 0;
 }
