@@ -99,10 +99,9 @@ void bubble_sort2(int* arr, int n) {
     int scount = 0; // Количество свапов.
     int icount = 0; // Колличество итераций алгоритма.
 
-    int bound = n - 1;
-    int last_swap;
+    int bound = n - 1;    
     while(bound != 0) {
-        last_swap = 0;
+        int last_swap = 0;
         for (int j = 0; j < bound; j++) {
             icount++;
             if (arr[j] > arr[j + 1]) {
