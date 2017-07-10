@@ -5,6 +5,9 @@
 #include <iostream>
 using namespace std;
 
+/// <summary>
+/// Вывод переданного массива на экран.
+/// </summary>
 void print(int arr[], int n) {
     for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
@@ -12,19 +15,24 @@ void print(int arr[], int n) {
     cout << endl;
 }
 
+/// <summary>
+/// Сдвиг всех нулевых элементов из массива в его конец.
+/// </summary>
 void move(int* arr, int n) {
     int count = 0;
 
+    // Проходимся по массиву и все ненулевые элементы копируем в начало массива.
     for (int i = 0; i < n; i++) {
         if (arr[i] != 0)
             arr[count++] = arr[i];
     }
 
+    // Заполняем конец массива нулями.
     while (count < n)
         arr[count++] = 0;
 }
 
-void main() {
+int main() {
     int n;
     cout << "Enter array size: ";
     cin >> n;
@@ -42,4 +50,6 @@ void main() {
 
     cout << "Array after move: " << endl;
     print(arr, n);
+
+    return 0;
 }

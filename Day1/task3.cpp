@@ -5,6 +5,9 @@
 #include <iostream>
 using namespace std;
 
+/// <summary>
+/// Вывод переданного массива на экран.
+/// </summary>
 void print(int arr[], int n) {
     for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
@@ -12,22 +15,28 @@ void print(int arr[], int n) {
     cout << endl;
 }
 
+/// <summary>
+/// Обмен местами двух элементов массива.
+/// </summary>
 void swap(int* arr, int ind1, int ind2) {
     int temp = arr[ind1];
     arr[ind1] = arr[ind2];
     arr[ind2] = temp;
 }
 
+/// <summary>
+/// Сортировка пузырьком.
+/// </summary>
 void bubble_sort(int* arr, int n) {
     for (int i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (arr[i] > arr[j])
-                swap(arr, i, j);
+        for (int j = 0; j < n - 1; j++) {
+            if (arr[j] > arr[j + 1])
+                swap(arr, j, j + 1);
         }
     }
 }
 
-void main() {
+int main() {
     int n;
     cout << "Enter array size: ";
     cin >> n;
@@ -45,4 +54,6 @@ void main() {
 
     cout << "Array after bubble sort: " << endl;
     print(arr, n);
+
+    return 0;
 }

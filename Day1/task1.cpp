@@ -5,6 +5,9 @@
 #include <iostream>
 using namespace std;
 
+/// <summary>
+/// Вывод переданного массива на экран.
+/// </summary>
 void print(int arr[], int n) {
     for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
@@ -12,18 +15,27 @@ void print(int arr[], int n) {
     cout << endl;
 }
 
+/// <summary>
+/// Обмен местами двух элементов массива.
+/// </summary>
 void swap(int* arr, int ind1, int ind2) {
     int temp = arr[ind1];
     arr[ind1] = arr[ind2];
     arr[ind2] = temp;
 }
 
+/// <summary>
+/// Перевернуть элементы массива с индексами между ind1 и ind2.
+/// </summary>
 void reverse(int* arr, int ind1, int ind2) {
     for (int i = 0; i < (ind2 - ind1 + 1) / 2; i++) {
         swap(arr, ind1 + i, ind2 - i);
     }
 }
 
+/// <summary>
+/// Сдвиг массива на k элементов влево.
+/// </summary>
 void shift(int* arr, int n, int k) {
     k %= n;
     reverse(arr, 0, k - 1);
@@ -31,7 +43,7 @@ void shift(int* arr, int n, int k) {
     reverse(arr, 0, n - 1);
 }
 
-void main() {
+int main() {
     unsigned int n;
     cout << "Enter array size (n): ";
     cin >> n;
@@ -54,4 +66,6 @@ void main() {
 
     cout << "Array after shift: " << endl;
     print(arr, n);
+
+    return 0;
 }
