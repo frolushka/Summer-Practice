@@ -7,11 +7,11 @@
 using namespace std;
 
 void print(int*, int);
-void array_copy(int*, int);
 void swap(int*, int, int);
 void bubble_sort(int*, int);
 void bubble_sort1(int*, int);
 void bubble_sort2(int*, int);
+int* array_copy(int*, int);
 
 int main() {
     srand(time(0));
@@ -26,7 +26,7 @@ int main() {
 
     int arr[n];
     for (int i = 0; i < n; i++) {
-        arr[i] = rand() % (l - h + 1) + l;
+        arr[i] = rand() % (l - h) + l;
     }
 
     bubble_sort(array_copy(arr, n), n);
