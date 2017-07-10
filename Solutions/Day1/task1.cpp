@@ -1,8 +1,6 @@
-/*
-Фролов Максим Павлович БПИ162
-Задание №1
-Разработано в CLion 2017.1.3
-*/
+// Фролов Максим Павлович БПИ162
+// Задание №1 день 1
+// Разработано в CLion 2017.1.3
 
 #include <iostream>
 using namespace std;
@@ -33,7 +31,7 @@ void shift(int* arr, int n, int k) {
     reverse(arr, 0, n - 1);
 }
 
-int main() {
+void main() {
     unsigned int n;
     cout << "Enter array size (n): ";
     cin >> n;
@@ -56,6 +54,4 @@ int main() {
 
     cout << "Array after shift: " << endl;
     print(arr, n);
-
-    return 0;
 }
