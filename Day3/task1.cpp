@@ -10,8 +10,8 @@ using namespace std;
 
 void print(int*, int);
 void swap(int*, int, int);
-void counting_sort(int*, int, int, int);
-void radix_sort(int*, int, int, int);
+void counting_sort(int*, int, int, int, ostream&);
+void radix_sort(int*, int, int, int, ostream&);
 int* array_copy(int*, int);
 
 int main() {
@@ -61,9 +61,15 @@ int main() {
         return 0;
     }
 
-    counting_sort(array_copy(arr, n), n, min, max);
-    radix_sort(array_copy(arr, n), n, min, max);
-    
+    counting_sort(array_copy(arr, n), n, min, max, cout);
+    radix_sort(array_copy(arr, n), n, min, max, cout);
+
+    ofstream output("output.txt");
+    if (output.is_open()) {
+        counting_sort(array_copy(arr, n), n, min, max, output);
+        radix_sort(array_copy(arr, n), n, min, max, output);
+    }
+
     return 0;
 }
 
@@ -89,9 +95,9 @@ void swap(int* arr, int ind1, int ind2) {
 /// <summary>
 /// Сортировка подсчетом.
 /// </summary>
-void counting_sort(int* arr, int n, int min, int max) {
-    cout << "------------------------" << endl;
-    cout << "Array before counting sort (stable): " << endl;
+void counting_sort(int* arr, int n, int min, int max, ostream& out) {
+    out << "------------------------" << endl;
+    out << "Array before counting sort (stable): " << endl;
     print(arr, n);
 
     int scount = 0; // Количество свапов.
@@ -120,23 +126,23 @@ void counting_sort(int* arr, int n, int min, int max) {
     }
     arr = sorted;
 
-    cout << "Array after counting sort (stable): " << endl;
+    out << "Array after counting sort (stable): " << endl;
     print(arr, n);
-    cout << "Iterations done: " << icount << endl;
-    cout << "Swaps done: " << scount << endl;
+    out << "Iterations done: " << icount << endl;
+    out << "Swaps done: " << scount << endl;
 }
 
 /// <summary>
 /// Цифровая сортировка.
 /// </summary>
-void radix_sort(int* arr, int n, int min, int max) {
+void radix_sort(int* arr, int n, int min, int max, ostream& out) {
     union uint_256 {
         unsigned int num;
         char chars[4];
     };
 
-    cout << "------------------------" << endl;
-    cout << "Array before radix sort (with union): " << endl;
+    out << "------------------------" << endl;
+    out << "Array before radix sort (with union): " << endl;
     print(arr, n);
 
     // Подготовка.
@@ -176,10 +182,10 @@ void radix_sort(int* arr, int n, int min, int max) {
         arr[i] = sorted[i].num;
     }
 
-    cout << "Array after radix sort (with union): " << endl;
+    out << "Array after radix sort (with union): " << endl;
     print(arr, n);
-    cout << "Iterations done: " << icount << endl;
-    cout << "Swaps done: " << scount << endl;
+    out << "Iterations done: " << icount << endl;
+    out << "Swaps done: " << scount << endl;
 }
 
 /// <summary>
