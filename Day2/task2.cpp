@@ -3,6 +3,7 @@
 // Разработано в CLion 2017.1.3
 
 #include <iostream>
+#include <cmath>
 #include <ctime>
 using namespace std;
 
@@ -111,7 +112,12 @@ void insertion_sort1(int* arr, int n) {
     for (int i = 1; i < n; i++) {
         if (arr[i - 1] > arr[i]) {
             int temp = arr[i];
-            int ind = binary_search(arr, 0, i - 1, temp);
+            
+            int ind;
+            if (temp <= arr[0])
+                ind = 0;
+            else
+                ind = binary_search(arr, 0, i - 1, temp);
             for (int j = i - 1; j >= ind; j--) {
                 arr[j + 1] = arr[j];
                 icount++;
@@ -132,17 +138,14 @@ void insertion_sort1(int* arr, int n) {
 /// Бинарный поиск элемента el в первых n элементах массива arr.
 /// </summary>
 int binary_search(int* arr, int l, int r, int el) {
-    if (el >= arr[r])
-        return r;
-    if (arr[l] >= el)
-        return l;
-
+    if (abs(l - r) <= 1)
+      return r;
     int mid = l + (r - l)/2; // Центр границы, заданной l и r.
     if (arr[mid] == el)
         return mid;
     if (arr[mid] > el)
-        return binary_search(arr, l, mid - 1, el);
-    return binary_search(arr, mid + 1, r, el);
+        return binary_search(arr, l, mid, el);
+    return binary_search(arr, mid, r, el);
 }
 
 /// <summary>
@@ -154,4 +157,3 @@ int* array_copy(int* arr, int n) {
         res[i] = arr[i];
     return res;
 }
-
