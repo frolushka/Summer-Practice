@@ -8,7 +8,7 @@
 #include <fstream>
 using namespace std;
 
-void print(int*, int);
+void print(int*, int, ostream&);
 void swap(int*, int, int);
 void counting_sort(int*, int, int, int, ostream&);
 void radix_sort(int*, int, int, int, ostream&);
@@ -46,8 +46,8 @@ int main() {
         input.open(path);
         if (input.is_open()) {
             input >> n;
-            arr = new int[5];
-            for (int i = 0; i < 5; i++) {
+            arr = new int[n];
+            for (int i = 0; i < n; i++) {
                 input >> arr[i];
                 if (arr[i] > max)
                     max = arr[i];
@@ -55,16 +55,20 @@ int main() {
                     min = arr[i];
             }
         }
+        else {
+            cout << "Wrong path.";
+            return -1;
+        }
     }
     else {
         cout << "Invalid input.";
-        return 0;
+        return -1;
     }
 
     counting_sort(array_copy(arr, n), n, min, max, cout);
     radix_sort(array_copy(arr, n), n, min, max, cout);
 
-    ofstream output("output.txt");
+    ofstream output("../output.txt");
     if (output.is_open()) {
         counting_sort(array_copy(arr, n), n, min, max, output);
         radix_sort(array_copy(arr, n), n, min, max, output);
@@ -76,11 +80,11 @@ int main() {
 /// <summary>
 /// Вывод переданного массива на экран.
 /// </summary>
-void print(int* arr, int n) {
+void print(int* arr, int n, ostream& out) {
     for (int i = 0; i < n; i++) {
-        cout << arr[i] << " ";
+        out << arr[i] << " ";
     }
-    cout << endl;
+    out << endl;
 }
 
 /// <summary>
@@ -98,7 +102,7 @@ void swap(int* arr, int ind1, int ind2) {
 void counting_sort(int* arr, int n, int min, int max, ostream& out) {
     out << "------------------------" << endl;
     out << "Array before counting sort (stable): " << endl;
-    print(arr, n);
+    print(arr, n, out);
 
     int scount = 0; // Количество свапов.
     int icount = 0; // Колличество итераций алгоритма.
@@ -127,7 +131,7 @@ void counting_sort(int* arr, int n, int min, int max, ostream& out) {
     arr = sorted;
 
     out << "Array after counting sort (stable): " << endl;
-    print(arr, n);
+    print(arr, n, out);
     out << "Iterations done: " << icount << endl;
     out << "Swaps done: " << scount << endl;
 }
@@ -143,7 +147,7 @@ void radix_sort(int* arr, int n, int min, int max, ostream& out) {
 
     out << "------------------------" << endl;
     out << "Array before radix sort (with union): " << endl;
-    print(arr, n);
+    print(arr, n, out);
 
     // Подготовка.
     uint_256* uarr = new uint_256[n];
@@ -154,8 +158,8 @@ void radix_sort(int* arr, int n, int min, int max, ostream& out) {
     int scount = 0; // Количество свапов.
     int icount = 0; // Колличество итераций алгоритма.
 
-    int* counter = new int[max - min + 1];
-    uint_256* sorted = new uint_256[n];
+    int counter[max - min + 1];
+    uint_256 sorted[256];
 
     for (int dig = 3; dig >= 0; dig--) {
         for (int i = 0; i < max - min + 1; i++) {
@@ -183,7 +187,7 @@ void radix_sort(int* arr, int n, int min, int max, ostream& out) {
     }
 
     out << "Array after radix sort (with union): " << endl;
-    print(arr, n);
+    print(arr, n, out);
     out << "Iterations done: " << icount << endl;
     out << "Swaps done: " << scount << endl;
 }
