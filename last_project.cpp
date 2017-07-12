@@ -4,25 +4,355 @@
 // 2017 год
 
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <climits>
+
+union uint_256 
+{
+    unsigned int num;
+    char chars[4];
+};
+
+const int TIMES = 50;
 
 // Secondary functions.
-void swap(int*, int, int);
-int* arrayCopy(int*, int);
-int binarySearch(int*, int, int, int);
+void swap(unsigned int*, int, int);
+unsigned int* arrayCopy(unsigned int*, int);
+int binarySearch(unsigned int*, int, int, int);
+int getMax(int, int);
+uint_256* getUintArray(unsigned int*, int);
+unsigned int* getIntArray(uint_256*, int);
+
+// Test generators.
+unsigned int* getArray1(int);
+unsigned int* getArray2(int);
+unsigned int* getArray3(int);
+unsigned int* getArray4(int);
+
+bool sortValidation(unsigned int*, int);
 
 // Sorts.
-void bubbleSort(int*, int);
-void bubbleSortIv1(int*, int);
-void bubbleSortIv2(int*, int);
-void insertionSort(int*, int);
-void insertionSortBin(int*, int);
-void countingSort(int*, int, int, int);
-void radixSort(int*, int, int, int);
+unsigned int* bubbleSort(unsigned int*, int);
+unsigned int* bubbleSortIv1(unsigned int*, int);
+unsigned int* bubbleSortIv2(unsigned int*, int);
+unsigned int* insertionSort(unsigned int*, int);
+unsigned int* insertionSortBin(unsigned int*, int);
+unsigned int* countingSort(unsigned int*, int, int);
+uint_256* radixSort(uint_256*, int, int);
+
+// =======================================================================================
+// =======================================================================================
+
+int main() 
+{
+    srand(time(0));
+    
+    std::cout << "Start..." << std::endl;
+    
+    unsigned int** arrays = new unsigned int*[4];
+    
+    arrays[0] = getArray1(9000);
+    arrays[1] = getArray2(9000);
+    arrays[2] = getArray3(9000);
+    arrays[3] = getArray4(9000);
+    
+    std::cout << "4 arrays generated..." << std::endl;
+    
+    unsigned int* temp;
+    
+    clock_t** t = new clock_t*[7];
+    for (int i = 0; i < 7; ++i)
+        t[i] = new clock_t[9];
+    
+    clock_t start, end;
+    
+    for (int i = 0; i < 4; ++i) 
+    {
+        clock_t ttemp;
+        for (int n = 1; n <= 9; ++n)
+        {
+            // BUBBLE SORT.
+            // Compiler setup for bubbleSort.
+            for (int it = 0; it < 5; ++it)
+            {
+                temp = arrayCopy(arrays[i], 1000 * n);
+                temp = bubbleSort(temp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in bubbleSort." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for bubbleSort.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "bubbleSort: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                temp = arrayCopy(arrays[i], 1000 * n);
+                start = clock();
+                temp = bubbleSort(temp, 1000 * n);
+                end = clock();
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in bubbleSort." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For bubbleSort in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[0][n] = ttemp;
+            
+            // BUBBLE SORT IV 1.
+            // Compiler setup for bubbleSortIv1.
+            for (int it = 0; it < 5; ++it)
+            {
+                temp = arrayCopy(arrays[i], 1000 * n);
+                temp = bubbleSortIv1(temp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in bubbleSortIv1." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for bubbleSortIv1.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "bubbleSortIv1: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                temp = arrayCopy(arrays[i], 1000 * n);
+                start = clock();
+                temp = bubbleSortIv1(temp, 1000 * n);
+                end = clock();
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in bubbleSortIv1." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For bubbleSortIv1 in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[1][n] = ttemp;
+            
+            // BUBBLE SORT IV 2.
+            // Compiler setup for bubbleSortIv2.
+            for (int it = 0; it < 5; ++it)
+            {
+                temp = arrayCopy(arrays[i], 1000 * n);
+                temp = bubbleSortIv2(temp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in bubbleSortIv2." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for bubbleSortIv2.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "bubbleSortIv2: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                temp = arrayCopy(arrays[i], 1000 * n);
+                start = clock();
+                temp = bubbleSortIv2(temp, 1000 * n);
+                end = clock();
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in bubbleSortIv2." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For bubbleSortIv2 in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[2][n] = ttemp;
+            
+            // INSERTION SORT.
+            // Compiler setup for insertionSort.
+            for (int it = 0; it < 5; ++it)
+            {
+                temp = arrayCopy(arrays[i], 1000 * n);
+                temp = insertionSort(temp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in insertionSort." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for insertionSort.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "insertionSort: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                temp = arrayCopy(arrays[i], 1000 * n);
+                start = clock();
+                temp = insertionSort(temp, 1000 * n);
+                end = clock();
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in insertionSort." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For insertionSort in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[3][n] = ttemp;
+            
+            // BINARY INSERTION SORT.
+            // Compiler setup for insertionSortBin.
+            for (int it = 0; it < 5; ++it)
+            {
+                temp = arrayCopy(arrays[i], 1000 * n);
+                temp = insertionSortBin(temp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in insertionSortBin." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for insertionSortBin.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "insertionSortBin: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                temp = arrayCopy(arrays[i], 1000 * n);
+                start = clock();
+                temp = insertionSortBin(temp, 1000 * n);
+                end = clock();
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in insertionSortBin." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For insertionSortBin in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[4][n] = ttemp;
+            
+            // COUNTING SORT.
+            int max = getMax(i, n);
+            
+            // Compiler setup for countingSort.
+            for (int it = 0; it < 5; ++it)
+            {
+                temp = arrayCopy(arrays[i], 1000 * n);
+                temp = countingSort(temp, 1000 * n, max);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in countingSort." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for countingSort.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "countingSort: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                temp = arrayCopy(arrays[i], 1000 * n);
+                start = clock();
+                temp = countingSort(temp, 1000 * n, max);
+                end = clock();
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in countingSort." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For countingSort in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[5][n] = ttemp;
+            
+            // RADIX SORT.
+            uint_256* utemp;
+            // Compiler setup for radixSort.
+            for (int it = 0; it < 5; ++it)
+            {
+                utemp = getUintArray(arrayCopy(arrays[i], 1000 * n), 1000 * n);
+                utemp = radixSort(utemp, 1000 * n, 256);
+                temp = getIntArray(utemp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in countingSort." << std::endl;
+                    return -1;
+                }
+            }
+            
+            ttemp = 0;
+            
+            // Test for countingSort.
+            for (int it = 0; it < TIMES; ++it)
+            {
+                std::cout << "countingSort: array: " << i << " size: " << 1000 * n << " test: " << it << std::endl;
+                utemp = getUintArray(arrayCopy(arrays[i], 1000 * n), 1000 * n);
+                start = clock();
+                utemp = radixSort(utemp, 1000 * n, 256);
+                end = clock();
+                temp = getIntArray(utemp, 1000 * n);
+                if (!sortValidation(temp, 1000 * n))
+                {
+                    std::cout << "Error in countingSort." << std::endl;
+                    return -1;
+                }
+                else
+                {
+                    ttemp += end - start;
+                }
+            }
+            
+            ttemp /= TIMES;
+            std::cout << "For countingSort in " << 1000 * n << " els ttemp = " << ttemp << std::endl;
+            t[6][n] = ttemp;
+        }
+    }
+}
+
+// =======================================================================================
+// =======================================================================================
 
 /// <summary>
 /// Swap two array elements.
 /// </summary>
-void swap(int* arr, int ind1, int ind2) 
+void swap(unsigned int* arr, int ind1, int ind2) 
 {
     int temp = arr[ind1];
     arr[ind1] = arr[ind2];
@@ -32,9 +362,9 @@ void swap(int* arr, int ind1, int ind2)
 /// <summary>
 /// Get reference to arr copy.
 /// </summary>
-int* arrayCopy(int* arr, int n) 
+unsigned int* arrayCopy(unsigned int* arr, int n) 
 {
-    int* res = new int[n];
+    unsigned int* res = new unsigned int[n];
     for (int i = 0; i < n; ++i)
         res[i] = arr[i];
     return res;
@@ -43,11 +373,13 @@ int* arrayCopy(int* arr, int n)
 /// <summary>
 /// Binary search for el in first n elements of arr.
 /// </summary>
-int binarySearch(int* arr, int l, int r, int el) 
+int binarySearch(unsigned int* arr, int l, int r, int el) 
 {
     if (abs(l - r) <= 1)
-      return r;
+        return r;
     int mid = l + (r - l)/2; // Center of range (l, r).
+    
+    // Find position of el relative to the center.
     if (arr[mid] == el)
         return mid;
     if (arr[mid] > el)
@@ -56,9 +388,103 @@ int binarySearch(int* arr, int l, int r, int el)
 }
 
 /// <summary>
+/// Check is sorted done correctly.
+/// </summary>
+bool sortValidation(unsigned int* arr, int n) 
+{
+    for (int i = 0; i < n - 1; ++i) 
+    {
+        if (arr[i] > arr[i + 1])
+            return false;
+    }
+    return true;
+}
+
+/// <summary>
+/// Get max element for counting sort.
+/// </summary>
+int getMax(int i, int n) {
+    switch(i) 
+    {
+        case 0:
+            return 7;
+        case 1:
+            return INT_MAX;
+        case 2:
+        case 3:
+            return 1000 * n;
+    }
+}
+
+uint_256* getUintArray(unsigned int* arr, int n) 
+{
+    uint_256* uarr = new uint_256[n];
+    for(int i = 0; i < n; ++i) {
+        uarr[i].num = arr[i];
+    }
+    return uarr;
+}
+
+unsigned int* getIntArray(uint_256* uarr, int n)
+{
+    unsigned int* arr = new unsigned int[n];
+    for(int i = 0; i < n; ++i) {
+        arr[i] = uarr[i].num;
+    }
+    return arr;
+}
+
+// =======================================================================================
+// =======================================================================================
+
+unsigned int* getArray1(int n) 
+{
+    unsigned int* arr = new unsigned int[n];
+    for (int i = 0; i < n; ++i)
+        arr[i] = rand() % 7; // Fill array with values from [0,7).
+    return arr;
+}
+
+unsigned int* getArray2(int n) 
+{
+    unsigned int* arr = new unsigned int[n];
+    for (int i = 0; i < n; ++i)
+        arr[i] = rand(); // Fill array with values from [0,INT_MAX).
+    return arr;
+}
+
+unsigned int* getArray3(int n) 
+{
+    unsigned int* arr = new unsigned int[n];
+    for (int i = 0; i < n; ++i)
+        arr[i] = i; // Fill array with sorted values.
+    
+    // Select two random pairs from arr and swap it.
+    int first, second;
+    for (int i = 0; i < 5; ++i) 
+    {
+        first = rand() % n;
+        second = rand() % n;
+        swap(arr, first, second);
+    }
+    return arr;
+}
+
+unsigned int* getArray4(int n) 
+{
+    unsigned int* arr = new unsigned int[n];
+    for (int i = 0; i < n; ++i)
+        arr[i] = n - i - 1; // Fill array with descending sorted values.
+    return arr;
+}
+
+// =======================================================================================
+// =======================================================================================
+
+/// <summary>
 /// Bubble sort.
 /// </summary>
-void bubbleSort(int* arr, int n) 
+unsigned int* bubbleSort(unsigned int* arr, int n) 
 {
     for (int i = 1; i < n; ++i) 
     {
@@ -68,12 +494,13 @@ void bubbleSort(int* arr, int n)
                 swap(arr, j, j + 1);
         }
     }
+    return arr;
 }
 
 /// <summary>
 /// Bubble sort with first Iverson condition.
 /// </summary>
-void bubbleSortIv1(int* arr, int n) 
+unsigned int* bubbleSortIv1(unsigned int* arr, int n) 
 {
     bool unsorted = true;
     while(unsorted) 
@@ -88,12 +515,13 @@ void bubbleSortIv1(int* arr, int n)
             }
         }
     }
+    return arr;
 }
 
 /// <summary>
 /// Bubble sort with second Iverson condition.
 /// </summary>
-void bubbleSortIv2(int* arr, int n) 
+unsigned int* bubbleSortIv2(unsigned int* arr, int n) 
 {
     int bound = n - 1;    
     while(bound != 0) 
@@ -109,12 +537,14 @@ void bubbleSortIv2(int* arr, int n)
         }
         bound = last_swap;
     }
+    return arr;
 }
 
 /// <summary>
 /// Insertion sort.
+/// On each iteration find greatest element and put it to the end. 
 /// </summary>
-void insertionSort(int* arr, int n) 
+unsigned int* insertionSort(unsigned int* arr, int n) 
 {
     for (int i = 1; i < n; ++i) 
     {
@@ -126,12 +556,14 @@ void insertionSort(int* arr, int n)
         }
         arr[j + 1] = temp;
     }
+    return arr;
 }
 
 /// <summary>
 /// Binary insertion sort.
+/// Find greatest element with binary search.
 /// </summary>
-void insertionSortBin(int* arr, int n) 
+unsigned int* insertionSortBin(unsigned int* arr, int n) 
 {
     for (int i = 1; i < n; ++i) 
     {
@@ -150,72 +582,60 @@ void insertionSortBin(int* arr, int n)
             arr[ind] = temp;
         }
     }
+    return arr;
 }
 
 /// <summary>
 /// Counting sort.
 /// </summary>
-void countingSort(int* arr, int n, int min, int max) 
+unsigned int* countingSort(unsigned int* arr, int n, int max) 
 {
-    int* counter = new int[max - min + 1];
-    int* sorted = new int[n];
+    unsigned int* counter = new unsigned int[max];
+    unsigned int* sorted = new unsigned int[n];
 
-    for (int i = 0; i < max - min + 1; ++i) 
+    for (int i = 0; i < max; ++i) 
         counter[i] = 0;
     for (int i = 0; i < n; ++i)
-        ++counter[arr[i] - min];
-    for (int j = 1; j < max - min + 1; ++j)
+        ++counter[arr[i]];
+    for (int j = 1; j < max; ++j)
         counter[j] += counter[j - 1];
     for (int i = n - 1; i >= 0; --i) 
     {
-        --counter[arr[i] - min];
-        sorted[counter[arr[i] - min]] = arr[i];
+        --counter[arr[i]];
+        sorted[counter[arr[i]]] = arr[i];
     }
-    arr = arrayCopy(sorted, n);
     
-    delete [] sorted;
+    delete [] arr;
     delete [] counter;
+    
+    return sorted;
 }
 
 /// <summary>
 /// Radix sort with union.
 /// </summary>
-void radixSort(int* arr, int n, int min, int max) 
+uint_256* radixSort(uint_256* arr, int n, int max) 
 {
-    union uint_256 
-    {
-        unsigned int num;
-        char chars[4];
-    };
-
-    uint_256* uarr = new uint_256[n];
-    for(int i = 0; i < n; ++i) 
-    {
-        uarr[i].num = (unsigned int)arr[i];
-    }
-
-    int* counter = new int[max - min + 1];
-    uint_256 sorted[256];
+    unsigned int* counter = new unsigned int[max];
+    uint_256* sorted = new uint_256[n];
 
     for (int dig = 3; dig >= 0; --dig) 
     {
-        for (int i = 0; i < max - min + 1; ++i)
+        for (int i = 0; i < max; ++i)
             counter[i] = 0;
         for (int i = 0; i < n; ++i)
-            ++counter[uarr[i].chars[dig] - min];
-        for (int j = 1; j < max - min + 1; ++j)
+            ++counter[arr[i].chars[dig]];
+        for (int j = 1; j < max; ++j)
             counter[j] += counter[j - 1];
         for (int i = n - 1; i >= 0; --i) 
         {
-            --counter[uarr[i].chars[dig] - min];
-            sorted[counter[uarr[i].chars[dig] - min]] = uarr[i];
+            --counter[arr[i].chars[dig]];
+            sorted[counter[arr[i].chars[dig]]] = arr[i];
         }
     }
     
-    delete [] uarr;
     delete [] counter;
-
-    for (int i = 0; i < n; i++) {
-        arr[i] = sorted[i].num;
-    }
+    delete [] arr;
+    
+    return sorted;
 }
