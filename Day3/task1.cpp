@@ -73,7 +73,9 @@ int main() {
         counting_sort(array_copy(arr, n), n, min, max, output);
         radix_sort(array_copy(arr, n), n, min, max, output);
     }
-
+    
+    delete [] arr;
+    
     return 0;
 }
 
@@ -129,7 +131,10 @@ void counting_sort(int* arr, int n, int min, int max, ostream& out) {
         sorted[counter[arr[i] - min]] = arr[i];
     }
     arr = sorted;
-
+    
+    delete [] sorted;
+    delete [] counter;
+    
     out << "Array after counting sort (stable): " << endl;
     print(arr, n, out);
     out << "Iterations done: " << icount << endl;
@@ -158,7 +163,7 @@ void radix_sort(int* arr, int n, int min, int max, ostream& out) {
     int scount = 0; // Количество свапов.
     int icount = 0; // Колличество итераций алгоритма.
 
-    int counter[max - min + 1];
+    int* counter = new int[max - min + 1];
     uint_256 sorted[256];
 
     for (int dig = 3; dig >= 0; dig--) {
@@ -181,6 +186,9 @@ void radix_sort(int* arr, int n, int min, int max, ostream& out) {
             sorted[counter[uarr[i].chars[dig] - min]] = uarr[i];
         }
     }
+    
+    delete [] uarr;
+    delete [] counter;
 
     for (int i = 0; i < n; i++) {
         arr[i] = sorted[i].num;
