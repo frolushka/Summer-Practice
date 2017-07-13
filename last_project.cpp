@@ -55,8 +55,6 @@ int main()
 {
     srand(time(0));
 
-    std::cout << "Start..." << std::endl;
-
     unsigned int** arrays = new unsigned int*[4];
 
     arrays[0] = getArray1(9000);
@@ -65,7 +63,8 @@ int main()
     arrays[3] = getArray4(9000);
 
     std::cout << "4 arrays generated..." << std::endl;
-
+    
+    // CPU ticks in future.
     __int64 t[4][7][9];
 
     long long int (*sortFunctions[7])(unsigned int*, int) =
@@ -79,7 +78,7 @@ int main()
                     unsigned int* arrTemp = copyArray(arrays[arr], size);
                     std::cout << "Function: " << sortFunctionsNames[func] << ", array: " << arr << ", size: " << size
                               << ", test: " << it << std::endl;
-                    // Если вдруг массив уже отсортирован.
+                    // Check is array sorted already.
                     if (sortValidation(arrTemp, size))
                     {
                         for (int i = 0; i < size; i++) {
@@ -92,10 +91,11 @@ int main()
                     }
                     long long int loopTemp = (*sortFunctions[func])(arrTemp, size);
                     std::cout << loopTemp << std::endl;
+                    // First 3 iterations for compiler setup.
                     if (it < 3)
                         continue;
                     tactsTemp += loopTemp;
-                    // Если после сортировки массив не стал сортированным.
+                    // Check is array sorted after sort.
                     if (!sortValidation(arrTemp, size)) {
                         for (int i = 0; i < size; i++) {
                             std::cout << arrTemp[i] << " ";
@@ -115,7 +115,7 @@ int main()
             }
         }
     }
-
+    
     printInfo(t, std::cout);
 
     std::ofstream output("../output.csv");
